@@ -2,6 +2,7 @@ from collections import OrderedDict
 from pyexcel_xls import save_data
 from pyexcel_xls import get_data
 import pypinyin
+from pypinyin import Style
 
 """处理单词库，添加拼音进入单词库"""
 """查看资料网址：https://www.cnblogs.com/alfred0311/p/7809863.html"""
@@ -12,6 +13,7 @@ import pypinyin
 def read_xls_file_print(fil):
     """读取xls文件,并打印出结果  """
     """fil为读取文件的绝对路径"""
+
     data = get_data(fil)
     print("数据格式：", type(data))
     for sheet_n in data.keys():
@@ -35,17 +37,22 @@ def str_of_result(res):
         no11    = str(no1)
         last_no = no11[2:len(no11) - 2]
         row.append(last_no)
+    #print(row)
     return row
 
 
-def addition_pinyin(data, num):
+def addition_pinyin(data, num,flag):
     """得到一个有症状名和对应拼音的列表,返回这个列表"""
     """data参数是str_of_result函数处理后的列表，num是处理后列表的长度"""
     row = []  # 新建一个空列表
     for value in range(0, num):
-        py  = pypinyin.slug(data[value])  # 每个词的拼音
+        if flag==1:
+            py  = pypinyin.slug(data[value],style=Style.TONE)  # 每个词的拼音,带音调
+        else:
+            py = pypinyin.slug(data[value])
         tem = [data[value], py]
         row.append(tem)
+    #print(row)
     return row
 
 
